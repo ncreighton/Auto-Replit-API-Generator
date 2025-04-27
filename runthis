@@ -1,0 +1,48 @@
+import os
+
+# Define the structure
+structure = {
+    "templates/nodejs": [
+        {"name": "package.json", "content": '''{
+  "name": "nodejs-template",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  }
+}'''},
+        {"name": "index.js", "content": '''const express = require('express');
+const app = express();
+const port = 3000;
+
+app.get('/', (req, res) => {
+    res.send('Hello, Node.js!');
+});
+
+app.listen(port, () => {
+    console.log(`Server running on http://localhost:${port}`);
+});'''},
+    ],
+    "templates/fastapi": [
+        {"name": "main.py", "content": '''from fastapi import FastAPI
+
+app = FastAPI()
+
+@app.get("/")
+async def root():
+    return {"message": "Hello, FastAPI!"}
+'''},
+        {"name": "requirements.txt", "content": '''fastapi
+uvicorn
+'''},
+    ],
+}
+
+# Create directories and files
+for folder, files in structure.items():
+    os.makedirs(folder, exist_ok=True)
+    for file in files:
+        with open(os.path.join(folder, file["name"]), "w") as f:
+            f.write(file["content"])
+
+print("Template structure created successfully.")
